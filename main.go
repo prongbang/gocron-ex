@@ -1,24 +1,33 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/go-co-op/gocron"
 )
 
-func task() {
-	fmt.Println("Task is being performed.")
+func taskEvery5Seconds() {
+	log.Println("Task is every 5 seconds")
+}
+
+func taskEveryMinute() {
+	log.Println("Task is every minute")
 }
 
 func main() {
 	s := gocron.NewScheduler(time.UTC)
 
-	s.Every(5).Seconds().Do(task) // every 5 seconds
+	s.Every(5).Seconds().Do(taskEvery5Seconds) // every 5 seconds
 
-	// cron expressions supported
-	s.Cron("*/1 * * * *").Do(task) // every minute
+	// Cron expressions supported: https://crontab.guru/
+	s.Cron("*/1 * * * *").Do(taskEveryMinute) // every minute
 
-	// starts the scheduler asynchronously
-	s.StartAsync()
+	// every 24th hour
+	s.Cron("0 */24 * * *").Do(func() {
+		log.Println("Task is every 24 hours")
+	})
+
+	// starts the scheduler blocking
+	s.StartBlocking()
 }
