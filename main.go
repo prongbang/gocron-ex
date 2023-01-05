@@ -18,8 +18,6 @@ func taskEveryMinute() {
 func main() {
 	s := gocron.NewScheduler(time.UTC)
 
-	s.Every(5).Seconds().Do(taskEvery5Seconds) // every 5 seconds
-
 	// Cron expressions supported: https://crontab.guru/
 	s.Cron("*/1 * * * *").Do(taskEveryMinute) // every minute
 
